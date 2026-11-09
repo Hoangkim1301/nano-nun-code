@@ -1,26 +1,53 @@
-# nano-nun-code
+<div align="center">
 
-A coding agent in a single Python file, built on [LangChain](https://python.langchain.com) with one tool: `bash`.
+# 🤖 nano-nun-code
 
-```
-> create hello.py that prints the first 10 primes and run it
+### One file. One tool. One loop.
+
+**A coding agent that does everything with just `bash`.**
+
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org)
+[![Built with LangChain](https://img.shields.io/badge/built%20with-LangChain-1C3C3C.svg)](https://python.langchain.com)
+[![Tools](https://img.shields.io/badge/tools-1-orange.svg)](#-why-only-one-tool)
+[![Runs with uv](https://img.shields.io/badge/runs%20with-uv-purple.svg)](https://docs.astral.sh/uv/)
+
+</div>
+
+---
+
+```text
+> create hello.py that prints the first 10 primes, then run it
 $ python -c "..." > hello.py
 run? [y/N/a] y
-...
+$ python hello.py
+2 3 5 7 11 13 17 19 23 29
 ```
 
-`nano-nun-code` is a minimal take on projects like [nanocode](https://github.com/1rgs/nanocode). The whole agent is one readable file (~120 lines): a model, one shell tool, a loop, and a small terminal UI.
+## ✨ Why only one tool?
 
-## Features
+Most coding agents ship a pile of tools: read file, write file, edit file, grep, glob, list directory... **nano-nun-code has exactly one: `bash`.** A shell can already do all of that.
 
-- **One file, one tool.** Reading, writing, editing and searching all go through the shell.
-- **Explicit agent loop.** Plain Python on top of `ChatOpenAI.bind_tools`, with no hidden framework loop.
-- **OpenAI-compatible.** Works with OpenAI or any endpoint that speaks the Chat Completions API with tool calling.
-- **Confirm before running.** Every command asks `y/N/a` first. Pass `--yolo` to skip the prompt.
-- **Terminal UI with [rich](https://github.com/Textualize/rich).** Markdown replies, a spinner while the model thinks, and dimmed command output.
-- **Zero setup.** Dependencies are declared inline (PEP 723), so `uv run` handles everything.
+|  | |
+|---|---|
+| 📄 **1 file** | the whole agent is `agent.py` (~120 lines) |
+| 🔧 **1 tool** | `bash`: read, write, edit, search, run tests, use git |
+| 🔁 **1 loop** | plain Python `while`, with no hidden framework loop |
+| 📦 **2 dependencies** | `langchain-openai` and `rich` |
 
-## Quick start
+Less surface means less to read, less to break, and nothing to learn before you can change it. 🧠
+
+## 🚀 Features
+
+- 🛠️ **One tool, no limits.** Everything goes through the shell.
+- 🔓 **Fully readable.** Read the entire agent in a few minutes.
+- 🔌 **Any OpenAI-compatible endpoint.** OpenAI, or any server that speaks Chat Completions with tool calling.
+- 🛡️ **Asks before it acts.** Every command prompts `y/N/a` first. Pass `--yolo` to skip the prompt.
+- 🎨 **Pretty terminal UI** with [rich](https://github.com/Textualize/rich): Markdown replies, a spinner while the model thinks, dimmed command output.
+- ⚡ **Zero setup.** Dependencies are declared inline (PEP 723), so `uv run` does the rest.
+- 🧪 **Tested.** The test suite uses a fake model, so it needs no API key.
+
+## ⚡ Quick start
 
 Requirements: [uv](https://docs.astral.sh/uv/) and an API key for an OpenAI-compatible endpoint.
 
@@ -32,17 +59,17 @@ cp .env.example .env        # then edit .env with your key
 uv run --env-file .env agent.py
 ```
 
-The first run installs dependencies into a cached environment; later runs start quickly.
+The first run installs dependencies into a cached environment; later runs start quickly. 🏎️
 
-## Configuration
+## 🔑 Configuration
 
 Settings are read from environment variables. `.env` is git-ignored; `.env.example` is the template.
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `OPENAI_API_KEY` | yes | none | API key. Use any non-empty value if your server ignores it. |
-| `OPENAI_BASE_URL` | no | OpenAI | Base URL of an OpenAI-compatible endpoint, e.g. `https://host/v1`. |
-| `MODEL` | no | `gpt-4.1` | Model name sent to the endpoint. |
+| `OPENAI_API_KEY` | ✅ | none | API key. Use any non-empty value if your server ignores it. |
+| `OPENAI_BASE_URL` | ➖ | OpenAI | Base URL of an OpenAI-compatible endpoint, e.g. `https://host/v1`. |
+| `MODEL` | ➖ | `gpt-4.1` | Model name sent to the endpoint. |
 
 You can also set them without a `.env` file:
 
@@ -57,28 +84,28 @@ uv run agent.py
 OPENAI_API_KEY=your-key uv run agent.py
 ```
 
-## Usage
+## 💬 Usage
 
 Start the agent and type a request:
 
-```
+```text
 > find all TODO comments in this folder and summarize them
 ```
 
 | Input | Effect |
 |---|---|
-| any text | Send a message to the agent |
-| `/c` | Clear the conversation |
-| `/q` or `/quit` | Quit (Ctrl-D also works on Linux and macOS) |
-| Ctrl-C | Cancel the current turn; the session keeps running |
+| any text | 💬 Send a message to the agent |
+| `/c` | 🧹 Clear the conversation |
+| `/q` or `/quit` | 👋 Quit (Ctrl-D also works on Linux and macOS) |
+| Ctrl-C | ✋ Cancel the current turn; the session keeps running |
 
 When the agent wants to run a command you see it prefixed with `$` and get a prompt:
 
 | Answer | Meaning |
 |---|---|
-| `y` | Run this command |
-| `n` or Enter | Deny it; the model is told and can adapt |
-| `a` | Run this and every later command this session |
+| `y` | ✅ Run this command |
+| `n` or Enter | ❌ Deny it; the model is told and can adapt |
+| `a` | ♾️ Run this and every later command this session |
 
 Run with `--yolo` to approve everything automatically:
 
@@ -86,9 +113,9 @@ Run with `--yolo` to approve everything automatically:
 uv run --env-file .env agent.py --yolo
 ```
 
-> **Warning:** the agent executes shell commands as your user. There is no sandbox. Use `--yolo` only in a directory and environment where you accept that risk.
+> ⚠️ **Warning:** the agent executes shell commands as your user. There is no sandbox. Use `--yolo` only in a directory and environment where you accept that risk.
 
-## How it works
+## 🧩 How it works
 
 The whole agent is this loop (`run_turn` in `agent.py`):
 
@@ -104,13 +131,13 @@ while True:
 
 The pieces:
 
-- `bash`: a LangChain `@tool` that runs a command via the platform shell (`cmd.exe` on Windows, `sh` elsewhere) with a 120s timeout and output truncated to 10,000 characters.
-- `run_turn`: the agent core. It never prints; it talks to the UI through callbacks (`ask`, `emit`, `busy`), so the `rich` shell can be swapped for another UI later.
-- `main`: the `rich` input loop and rendering.
+- 🔧 `bash`: a LangChain `@tool` that runs a command via the platform shell (`cmd.exe` on Windows, `sh` elsewhere) with a 120s timeout and output truncated to 10,000 characters.
+- 🧠 `run_turn`: the agent core. It never prints; it talks to the UI through callbacks (`ask`, `emit`, `busy`), so the `rich` shell can be swapped for another UI later.
+- 🖥️ `main`: the `rich` input loop and rendering.
 
-If a turn fails or is cancelled, the history rolls back to before the turn, so the next message is not sent with a dangling tool call.
+If a turn fails or is cancelled, the history rolls back to before the turn, so the next message is not sent with a dangling tool call. 🔄
 
-## Development
+## 🧪 Development
 
 ```bash
 uv run --no-project --with pytest --with langchain-openai --with rich python -m pytest tests -v
@@ -118,24 +145,28 @@ uv run --no-project --with pytest --with langchain-openai --with rich python -m 
 
 Tests use a fake model, so they need no API key or network.
 
-## Known limitations
+## 🚧 Known limitations
 
-- No streaming: each reply appears once it is complete.
-- On Windows each command runs in a fresh `cmd.exe`, so `cd` and environment changes do not persist between calls. The model is told this in its system prompt.
-- No iteration cap on the agent loop and no request timeout on the model call.
-- No persistence across sessions.
-- No thinking or reasoning display. `ChatOpenAI` on the Chat Completions API does not expose reasoning text.
+- 🌊 No streaming: each reply appears once it is complete.
+- 🪟 On Windows each command runs in a fresh `cmd.exe`, so `cd` and environment changes do not persist between calls. The model is told this in its system prompt.
+- ♻️ No iteration cap on the agent loop and no request timeout on the model call.
+- 💾 No persistence across sessions.
+- 💭 No thinking or reasoning display. `ChatOpenAI` on the Chat Completions API does not expose reasoning text.
 
-## Roadmap
+## 🗺️ Roadmap
 
-- A fuller terminal UI with [Textual](https://textual.textualize.io) or [prompt_toolkit](https://python-prompt-toolkit.readthedocs.io).
-- Token streaming.
+- 🖼️ A fuller terminal UI with [Textual](https://textual.textualize.io) or [prompt_toolkit](https://python-prompt-toolkit.readthedocs.io).
+- 🌊 Token streaming.
 
-## Project docs
+## 📚 Project docs
 
-- Design: [`docs/superpowers/specs/2026-11-09-one-tool-coding-agent-design.md`](docs/superpowers/specs/2026-11-09-one-tool-coding-agent-design.md)
-- Implementation plan: [`docs/superpowers/plans/2026-11-09-one-tool-coding-agent.md`](docs/superpowers/plans/2026-11-09-one-tool-coding-agent.md)
+- 📐 Design: [`docs/superpowers/specs/2026-11-09-one-tool-coding-agent-design.md`](docs/superpowers/specs/2026-11-09-one-tool-coding-agent-design.md)
+- 📝 Implementation plan: [`docs/superpowers/plans/2026-11-09-one-tool-coding-agent.md`](docs/superpowers/plans/2026-11-09-one-tool-coding-agent.md)
 
-## License
+## 🙏 Inspiration
+
+Inspired by [nanocode](https://github.com/1rgs/nanocode). This project takes the idea smaller: one file, one tool.
+
+## 📄 License
 
 [MIT](LICENSE)
